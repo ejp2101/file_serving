@@ -18,12 +18,15 @@ const server = http.createServer((req, res) => {
         // Handle file upload
         form.parse(req, (err, fields, files) => {
             if (err) {
+                console.error('Error parsing the file:', err);
                 res.writeHead(400, { 'Content-Type': 'text/html' });
                 return res.end('Error parsing the file');
             }
 
             const file = files.file; // Assuming the input name is 'file'
             const fileType = mime.lookup(file.name);
+            console.log('Uploaded file name:', file.name);
+            console.log('Uploaded file MIME type:', fileType);
 
             // Validate file type (e.g., allow only images)
             const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
@@ -38,6 +41,7 @@ const server = http.createServer((req, res) => {
             // Move the file to the uploads directory
             fs.rename(oldPath, newPath, (err) => {
                 if (err) {
+                    console.error('Error saving the file:', err);
                     res.writeHead(500, { 'Content-Type': 'text/html' });
                     return res.end('Error saving the file');
                 }
